@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YourAppName</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+  <!-- Include Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+  <header>
+    <% if teacher_signed_in? %>
+      <%= link_to "Logout", destroy_teacher_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "Login", new_teacher_session_path %>
+    <% end %>
+  </header>
+  <!-- Bootstrap JS (include Popper.js if needed) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Flash Messages -->
+  <% flash.each do |key, message| %>
+    <div class="flash <%= key %>"><%= message %></div>
+  <% end %>
+
+  <%= yield %>
+</body>
+</html>

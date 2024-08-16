@@ -1,0 +1,107 @@
+<!-- app/views/students/index.html.erb -->
+
+<%# <%= link_to 'New Student', '#', id: 'new-student-btn', class: 'btn btn-primary', data: { toggle: 'modal', target: '#studentModal' } %> %>
+<!-- Add this code to your view (e.g., app/views/students/index.html.erb) -->
+
+<!-- Create Student Link -->
+<%= link_to 'Create Student', '#', id: 'new-student-btn', class: 'btn btn-primary' %>
+
+<!-- Modal Structure -->
+<div id="studentModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Student</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form for creating a student -->
+        <%= form_with(model: Student.new, url: students_path, local: true) do |form| %>
+          <div class="form-group">
+            <%= form.label :name %>
+            <%= form.text_field :name, class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :subject_name %>
+            <%= form.text_field :subject, class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :marks %>
+            <%= form.number_field :marks, class: 'form-control' %>
+          </div>
+
+          <div class="modal-footer">
+            <%= form.submit 'Create Student', class: 'btn btn-primary' %>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%= stylesheet_link_tag 'students', media: 'all' %>
+
+<table class="student-listing-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Subject</th>
+      <th>Marks</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.name %></td>
+        <td><%= student.subject %></td>
+        <td><%= student.marks %></td>
+        <td>
+          <button class="btn btn-primary edit-student-btn" data-id="<%= student.id %>">Edit</button>
+
+          <%= button_to 'Delete', student_path(student), method: :delete, data: { confirm: 'Are you sure you want to delete this student?' }, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- Add this JavaScript code to your view (e.g., at the bottom of app/views/students/index.html.erb) -->
+
+<script type="text/javascript">
+  window.onload = function() {
+    // This code runs on every page load, including reloads
+
+    // Open the modal when the 'Create Student' button is clicked
+    document.getElementById('new-student-btn').onclick = function() {
+        debugger;
+      $('#studentModal').modal('show');
+    };
+
+    // Handle the edit button to populate the modal with the correct student data
+    document.querySelectorAll('.edit-student-btn').forEach(function(button) {
+      button.onclick = function() {
+        let studentId = this.dataset.id;
+        $.ajax({
+          url: `/students/${studentId}/edit`,
+          method: 'GET',
+          success: function(response) {
+            $('#studentModal .modal-body').html(response);
+            $('#studentModal').modal('show');
+          }
+        });
+      };
+    });
+  };
+</script>
+
+
+
+
+

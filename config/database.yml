@@ -1,0 +1,32 @@
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: postgres
+  password: server.123
+
+# development:
+#   <<: *default
+#   database: tonite_dev_1_2
+#   #tonite_dev  actual db
+#   host: localhost
+
+test:
+  <<: *default
+  database: teacher_portal_test
+  host: localhost
+
+production:
+  <<: *default
+  database: <%= Rails.application.credentials.dig(:database, :db_name) %>
+  username: <%= Rails.application.credentials.dig(:database, :user_name) %>
+  password: <%= Rails.application.credentials.dig(:database, :password) %> 
+  host: localhost
+
+development:
+  <<: *default
+  database: teacher_portal_dev
+  #tonite_dev  actual db
+  host: localhost
+  port: 5432
